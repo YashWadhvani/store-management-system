@@ -3,7 +3,7 @@ from tabulate import tabulate
 
 mydb = database_connector()
 mycursor = mydb.cursor()
-
+mycursor.execute("USE STORE_MANAGEMENT")
 
 class Owner:
     """Class for Object of type 'Owner'. Contains all the functions accessible by an Owner."""
@@ -17,7 +17,7 @@ class Owner:
         mycursor.execute("SELECT OWNER_ID, NAME FROM OWNERS")
         myresult = mycursor.fetchall()
         if myresult == []:
-            x = [0, None]
+            myresult.append([0, None])
 
         owners = []
         for x in myresult:
@@ -36,7 +36,7 @@ class Owner:
 
         mycursor.execute("SELECT * FROM STOCK;")
         myresult = mycursor.fetchall()
-        if mycursor.rowcount == -1:
+        if mycursor.rowcount == 0:
             print("There is no stock left!")
         else:
             print(tabulate(myresult, headers=[
@@ -64,7 +64,7 @@ class Owner:
         mycursor.execute(
             f"SELECT CUSTOMERS.ID, CUSTOMERS.NAME, PHONE, EMAIL, CUSTOMERS.ACCOUNT FROM CUSTOMERS, OWNERS WHERE CUSTOMERS.OWNER_ID = OWNERS.OWNER_ID AND OWNERS.NAME = '{Owner.name}';")
         myresult = mycursor.fetchall()
-        if mycursor.rowcount == -1:
+        if mycursor.rowcount == 0:
             print("There are no Customers for this Owner!")
         else:
             print(tabulate(myresult, headers=[
@@ -138,13 +138,16 @@ class Owner:
         Owner.totBalance = myresult[1]
         print(f"{Owner.name} has Rs. {Owner.totBalance} in account!")
 
-    def addCustomer(self, name):
+    def addCustomer(self, name, cust_id):
         """Function to add a New Customer to Customers Table."""
 
         mycursor.execute("SELECT OWNER_ID, NAME FROM OWNERS")
         myresult = mycursor.fetchall()
         Owners = {}
 
+        if myresult == []:
+            myresult.append([0, None])
+            
         for x in myresult:
             Owners[x[1]] = x[0]
 
@@ -154,8 +157,9 @@ class Owner:
 
         phone = int(input("Enter Phone No. :-"))
         email = input("Enter Email Id :-")
+        cust_id += 1
         mycursor.execute(
-            f"INSERT INTO CUSTOMERS(NAME, PHONE, EMAIL, OWNER_ID) VALUES('{name}','{phone}','{email}', {id});")
+            f"INSERT INTO CUSTOMERS(ID, NAME, PHONE, EMAIL, OWNER_ID) VALUES({cust_id},'{name}','{phone}','{email}', {id});")
         mydb.commit()
 
     def delete_item(self):
