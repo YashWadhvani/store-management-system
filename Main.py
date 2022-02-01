@@ -71,7 +71,7 @@ def CustomerMenu():
         print()
         print('1. Purchase Items', end='\t \t')
         print('2. Pay Outstanding Bill')
-        print('3. Search Item', end='\t \t')
+        print('3. Search Item', end='\t \t \t')
         print('4. Exit')
         ch = int(input('Enter Your Choice :-'))
         if ch == 1:
