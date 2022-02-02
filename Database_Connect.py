@@ -7,16 +7,16 @@ def database_connector():
     try:
         mydb = mycon.connect(
             host='localhost',
-            user='Yash',
-            password='INCORRECT',
+            user='root',
+            password='', #Enter Your SQL Password here.
             database='STORE_MANAGEMENT'
         )
 
     except:
         mydb = mycon.connect(
             host="localhost",
-            user="Yash",
-            password="INCORRECT"
+            user="root",
+            password="" #Enter Your SQL Password here.
         )
         mycursor = mydb.cursor()
         mycursor.execute('CREATE DATABASE STORE_MANAGEMENT')
